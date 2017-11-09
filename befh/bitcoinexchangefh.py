@@ -24,6 +24,7 @@ from befh.mysql_client import MysqlClient
 from befh.sqlite_client import SqliteClient
 from befh.file_client import FileClient
 from befh.zmq_client import ZmqClient
+from befh.kafka_client import KafkaClient
 from befh.subscription_manager import SubscriptionManager
 from befh.util import Logger
 
@@ -37,6 +38,7 @@ def main():
     parser.add_argument('-sqlite', action='store_true', help='Use SQLite database.')
     parser.add_argument('-mysql', action='store_true', help='Use MySQL.')
     parser.add_argument('-zmq', action='store_true', help='Use zmq publisher.')
+    parser.add_argument('-kafka', action='store_true', help='Use kafka publisher.')
     parser.add_argument('-mysqldest', action='store', dest='mysqldest',
                         help='MySQL destination. Formatted as <name:pwd@host:port>',
                         default='')
@@ -48,6 +50,9 @@ def main():
                         default='')
     parser.add_argument('-zmqdest', action='store', dest='zmqdest',
                         help='Zmq destination. For example \"tcp://127.0.0.1:3306\"',
+                        default='')
+    parser.add_argument('-kafkadest', action='store', dest='kafkadest',
+                        help='Kafka destination. For example \"127.0.0.1:9092\"',
                         default='')
     parser.add_argument('-sqlitepath', action='store', dest='sqlitepath',
                         help='SQLite database path',
@@ -95,6 +100,11 @@ def main():
     if args.zmq:
         db_client = ZmqClient()
         db_client.connect(addr=args.zmqdest)
+        db_clients.append(db_client)
+        is_database_defined = True
+    if args.kafka:
+        db_client = KafkaClient()
+        db_client.connect(addr=args.kafkadest)
         db_clients.append(db_client)
         is_database_defined = True
 
