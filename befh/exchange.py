@@ -1,4 +1,5 @@
 #!/bin/python
+from befh.kafka_client import KafkaClient
 from befh.zmq_client import ZmqClient
 from befh.file_client import FileClient
 from befh.market_data import L2Depth, Trade, Snapshot
@@ -59,7 +60,7 @@ class ExchangeGateway:
 
     @classmethod
     def is_allowed_instmt_record(cls, db_client):
-        return not isinstance(db_client, ZmqClient)
+        return not isinstance(db_client, ZmqClient) and not isinstance(db_client, KafkaClient)
 
     @classmethod
     def init_snapshot_table(cls, db_clients):
