@@ -218,7 +218,9 @@ class ExchGwPoloniex(ExchangeGateway):
                     continue
             except Exception as e:
                 Logger.error(self.__class__.__name__, "Error in trades: %s" % e)                
-                
+                time.sleep(1)
+                continue
+
             for trade in ret:
                 assert isinstance(trade.trade_id, str), "trade.trade_id(%s) = %s" % (type(trade.trade_id), trade.trade_id)
                 assert isinstance(instmt.get_exch_trade_id(), str), \

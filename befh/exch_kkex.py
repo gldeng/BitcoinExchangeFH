@@ -10,7 +10,7 @@ from multiprocessing import Process
 import time
 
 
-class ExchGwApiLiqui(RESTfulApiSocket):
+class ExchGwApiKkex(RESTfulApiSocket):
     """
     Exchange gateway RESTfulApi
     """
@@ -51,12 +51,12 @@ class ExchGwApiLiqui(RESTfulApiSocket):
         
     @classmethod
     def get_order_book_link(cls, instmt):
-        return "https://api.liqui.io/api/3/depth/{0}".format(
+        return "https://kkex.com/api/v1/depth?symbol={0}".format(
             instmt.get_instmt_code())
 
     @classmethod
     def get_trades_link(cls, instmt):
-        return "https://api.liqui.io/api/3/trades/{0}?limit=20".format(
+        return "https://kkex.com/api/v1/trades?symbol={0}".format(
             (instmt.get_instmt_code()))
                 
     @classmethod
@@ -166,7 +166,7 @@ class ExchGwApiLiqui(RESTfulApiSocket):
         return trades
 
 
-class ExchGwLiqui(ExchangeGateway):
+class ExchGwKkex(ExchangeGateway):
     """
     Exchange gateway
     """
@@ -175,7 +175,7 @@ class ExchGwLiqui(ExchangeGateway):
         Constructor
         :param db_client: Database client
         """
-        ExchangeGateway.__init__(self, ExchGwApiLiqui(), db_clients)
+        ExchangeGateway.__init__(self, ExchGwApiKkex(), db_clients)
 
     @classmethod
     def get_exchange_name(cls):
@@ -255,12 +255,12 @@ class ExchGwLiqui(ExchangeGateway):
         
 if __name__ == '__main__':
     Logger.init_log()
-    exchange_name = 'Liqui'
-    instmt_name = 'ETHBTC'
-    instmt_code = 'eth_btc'
+    exchange_name = 'Kkex'
+    instmt_name = 'BCHBTC'
+    instmt_code = 'BCHBTC'
     instmt = Instrument(exchange_name, instmt_name, instmt_code)    
     db_client = SqlClientTemplate()
-    exch = ExchGwLiqui([db_client])
+    exch = ExchGwKkex([db_client])
     instmt.set_l2_depth(L2Depth(5))
     instmt.set_prev_l2_depth(L2Depth(5))
     instmt.set_recovered(False)    
