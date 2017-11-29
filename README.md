@@ -43,6 +43,7 @@ Users can
 - OkCoin (Websocket)
 - Quoine (RESTful)
 - Yunbi (RESTful)
+- Kkex (RESTful)
 
 Currently the support of other exchanges is still under development.
 
@@ -159,7 +160,7 @@ or
 
 ```
 source setup-env.sh
-python ./befh/bitcoinexchangefh.py -kafka -kafkadest "127.0.0.1:9092" -instmts subscriptions.ini
+python ./befh/bitcoinexchangefh.py -kafka -kafkadest "127.0.0.1:9092" -instmts subscription.ini
 ```
 
 
