@@ -160,7 +160,7 @@ or
 
 ```
 source setup-env.sh
-python ./befh/bitcoinexchangefh.py -kafka -kafkadest "127.0.0.1:9092" -instmts subscription.ini
+python ./befh/bitcoinexchangefh.py -kafka -kafkadest "127.0.0.1:9092" -instmts subscription.ini -output log.txt
 ```
 
 
