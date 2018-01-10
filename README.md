@@ -44,6 +44,7 @@ Users can
 - Quoine (RESTful)
 - Yunbi (RESTful)
 - Kkex (RESTful)
+- Bibox (RESTful)
 
 Currently the support of other exchanges is still under development.
 
