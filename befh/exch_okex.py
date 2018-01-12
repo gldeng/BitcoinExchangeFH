@@ -3,6 +3,7 @@ from befh.market_data import L2Depth, Trade
 from befh.exchange import ExchangeGateway
 from befh.instrument import Instrument
 from befh.util import Logger
+from befh.sql_client_template import SqlClientTemplate
 import time
 import threading
 import json
@@ -10,7 +11,7 @@ from functools import partial
 from datetime import datetime
 
 
-class ExchGwOkCoinWs(WebSocketApiClient):
+class ExchGwOkexWs(WebSocketApiClient):
     """
     Exchange socket
     """
@@ -18,7 +19,7 @@ class ExchGwOkCoinWs(WebSocketApiClient):
         """
         Constructor
         """
-        WebSocketApiClient.__init__(self, 'ExchGwOkCoin')
+        WebSocketApiClient.__init__(self, 'ExchGwOkex')
         
     @classmethod
     def get_order_book_timestamp_field_name(cls):
@@ -34,7 +35,7 @@ class ExchGwOkCoinWs(WebSocketApiClient):
         
     @classmethod
     def get_link(cls):
-        return 'wss://real.okcoin.com:10440/websocket/okcoinapi'
+        return 'wss://real.okex.com:10441/websocket'
 
     @classmethod
     def get_order_book_subscription_string(cls, instmt):
@@ -103,7 +104,7 @@ class ExchGwOkCoinWs(WebSocketApiClient):
         return trade
 
 
-class ExchGwOkCoin(ExchangeGateway):
+class ExchGwOkex(ExchangeGateway):
     """
     Exchange gateway
     """
@@ -112,7 +113,7 @@ class ExchGwOkCoin(ExchangeGateway):
         Constructor
         :param db_client: Database client
         """
-        ExchangeGateway.__init__(self, ExchGwOkCoinWs(), db_clients)
+        ExchangeGateway.__init__(self, ExchGwOkexWs(), db_clients)
 
     @classmethod
     def get_exchange_name(cls):
@@ -120,7 +121,7 @@ class ExchGwOkCoin(ExchangeGateway):
         Get exchange name
         :return: Exchange name string
         """
-        return 'OkCoin'
+        return 'Okex'
 
     def on_open_handler(self, instmt, ws):
         """
@@ -128,10 +129,12 @@ class ExchGwOkCoin(ExchangeGateway):
         :param instmt: Instrument
         :param ws: Web socket
         """
+        print('........')
         Logger.info(self.__class__.__name__, "Instrument %s is subscribed in channel %s" % \
                   (instmt.get_instmt_code(), instmt.get_exchange_name()))
         if not instmt.get_subscribed():
             instmt_code_split = instmt.get_instmt_code().split('_')
+            print(instmt_code_split)
             if len(instmt_code_split) == 3:
                 # Future instruments
                 instmt.set_order_book_channel_id("ok_sub_%s_%s_depth_%s_20" % \
@@ -211,3 +214,13 @@ class ExchGwOkCoin(ExchangeGateway):
                                         on_open_handler=partial(self.on_open_handler, instmt),
                                         on_close_handler=partial(self.on_close_handler, instmt))]
 
+
+if __name__ == '__main__':
+    exchange_name = 'Okex'
+    instmt_name = 'BCHBTC'
+    instmt_code = 'BCHBTC'
+    instmt = Instrument(exchange_name, instmt_name, instmt_code)
+    db_client = SqlClientTemplate()
+    Logger.init_log()
+    exch = ExchGwOkex([db_client])
+    td = exch.start(instmt)    
