@@ -45,6 +45,8 @@ Users can
 - Yunbi (RESTful)
 - Kkex (RESTful)
 - Bibox (RESTful)
+- Okex (RESTful)
+- Aex (RESTful)
 
 Currently the support of other exchanges is still under development.
 
