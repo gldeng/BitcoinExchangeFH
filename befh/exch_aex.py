@@ -278,8 +278,8 @@ class ExchGwAex(ExchangeGateway):
 if __name__ == '__main__':
     Logger.init_log()
     exchange_name = 'Aex'
-    instmt_name = 'BCD_BTC'
-    instmt_code = 'BCD_BTC'
+    instmt_name = 'AE_BTC'
+    instmt_code = 'AE_BTC'
     instmt = Instrument(exchange_name, instmt_name, instmt_code)    
     db_client = SqlClientTemplate()
     exch = ExchGwAex([db_client])
