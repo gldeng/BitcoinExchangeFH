@@ -38,6 +38,14 @@ class ExchGwGeminiRestfulApi(RESTfulApiSocket):
         return 'asks'
         
     @classmethod
+    def get_price_field_name(cls):
+        return 'price'        
+
+    @classmethod
+    def get_volume_field_name(cls):
+        return 'amount'
+
+    @classmethod
     def get_trade_side_field_name(cls):
         return 'type'
         
@@ -51,7 +59,7 @@ class ExchGwGeminiRestfulApi(RESTfulApiSocket):
         
     @classmethod
     def get_trade_volume_field_name(cls):
-        return 'amount'        
+        return 'amount'
          
     @classmethod
     def get_order_book_link(cls, instmt):
@@ -80,17 +88,17 @@ class ExchGwGeminiRestfulApi(RESTfulApiSocket):
 
             # Bids
             bids = raw[cls.get_bids_field_name()]
-            bids = sorted(bids, key=lambda x: x[cls.get_trade_price_field_name()], reverse=True)
+            bids = sorted(bids, key=lambda x: x[cls.get_price_field_name()], reverse=True)
             for i in range(0, min(5, len(bids))):
-                l2_depth.bids[i].price = float(bids[i][cls.get_trade_price_field_name()])
-                l2_depth.bids[i].volume = float(bids[i][cls.get_trade_volume_field_name()])
+                l2_depth.bids[i].price = float(bids[i][cls.get_price_field_name()])
+                l2_depth.bids[i].volume = float(bids[i][cls.get_volume_field_name()])
 
             # Asks
             asks = raw[cls.get_asks_field_name()]
-            asks = sorted(asks, key=lambda x: x[cls.get_trade_price_field_name()])
+            asks = sorted(asks, key=lambda x: x[cls.get_price_field_name()])
             for i in range(0, min(5, len(asks))):
-                l2_depth.asks[i].price = float(asks[i][cls.get_trade_price_field_name()])
-                l2_depth.asks[i].volume = float(asks[i][cls.get_trade_volume_field_name()])
+                l2_depth.asks[i].price = float(asks[i][cls.get_price_field_name()])
+                l2_depth.asks[i].volume = float(asks[i][cls.get_volume_field_name()])
         else:
             raise Exception('Does not contain order book keys in instmt %s-%s.\nOriginal:\n%s' % \
                 (instmt.get_exchange_name(), instmt.get_instmt_name(), \
