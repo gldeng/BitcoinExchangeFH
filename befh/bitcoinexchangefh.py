@@ -25,6 +25,7 @@ from befh.exch_aex import ExchGwAex
 from befh.exch_bigone import ExchGwBigone
 from befh.exch_gateio import ExchGwGateio
 from befh.exch_huobi import ExchGwHuobi
+from befh.exch_gemini import ExchGwGemini
 from befh.kdbplus_client import KdbPlusClient
 from befh.mysql_client import MysqlClient
 from befh.sqlite_client import SqliteClient
@@ -169,6 +170,7 @@ def main():
     exch_gws.append(ExchGwBigone(db_clients))
     exch_gws.append(ExchGwGateio(db_clients))
     exch_gws.append(ExchGwHuobi(db_clients))
+    exch_gws.append(ExchGwGemini(db_clients))
 
     threads = []
     for exch in exch_gws:
