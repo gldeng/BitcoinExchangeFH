@@ -23,10 +23,10 @@ from befh.exch_bibox import ExchGwBibox
 from befh.exch_aex import ExchGwAex
 from befh.exch_bigone import ExchGwBigone
 from befh.exch_gateio import ExchGwGateio
-
+from befh.exch_huobi import ExchGwHuobi
 from befh.kdbplus_client import KdbPlusClient
 from befh.mysql_client import MysqlClient
-# from befh.sqlite_client import SqliteClient
+from befh.sqlite_client import SqliteClient
 from befh.file_client import FileClient
 from befh.zmq_client import ZmqClient
 from befh.kafka_client import KafkaClient
@@ -73,11 +73,11 @@ def main():
 
     db_clients = []
     is_database_defined = False
-    # if args.sqlite:
-    #     db_client = SqliteClient()
-    #     db_client.connect(path=args.sqlitepath)
-    #     db_clients.append(db_client)
-    #     is_database_defined = True
+    if args.sqlite:
+        db_client = SqliteClient()
+        db_client.connect(path=args.sqlitepath)
+        db_clients.append(db_client)
+        is_database_defined = True
     if args.mysql:
         db_client = MysqlClient()
         mysqldest = args.mysqldest
@@ -166,6 +166,7 @@ def main():
     exch_gws.append(ExchGwAex(db_clients))
     exch_gws.append(ExchGwBigone(db_clients))
     exch_gws.append(ExchGwGateio(db_clients))
+    exch_gws.append(ExchGwHuobi(db_clients))
 
     threads = []
     for exch in exch_gws:
