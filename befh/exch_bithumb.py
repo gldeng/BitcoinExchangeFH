@@ -47,15 +47,15 @@ class ExchGwApiBithumb(RESTfulApiSocket):
         
     @classmethod
     def get_trade_id_field_name(cls):
-        return 'tradeID'
+        return 'cont_no'
         
     @classmethod
     def get_trade_price_field_name(cls):
-        return 'rate'        
+        return 'price'        
         
     @classmethod
     def get_trade_volume_field_name(cls):
-        return 'amount'        
+        return 'units_traded'        
         
     @classmethod
     def get_order_book_link(cls, instmt):
@@ -74,7 +74,6 @@ class ExchGwApiBithumb(RESTfulApiSocket):
         """
         l2_depth = L2Depth()
         keys = list(raw.keys())
-        print(raw)
         if cls.get_bids_field_name() in keys and \
            cls.get_asks_field_name() in keys:
             
@@ -161,6 +160,8 @@ class ExchGwApiBithumb(RESTfulApiSocket):
         """
         link = cls.get_trades_link(instmt)
         res = cls.request(link)
+        if isinstance(res, dict):
+            res = res['data']
         trades = []
         if len(res) > 0:
             for i in range(len(res)-1, -1, -1):
@@ -220,7 +221,8 @@ class ExchGwBithumb(ExchangeGateway):
                     continue
             except Exception as e:
                 Logger.error(self.__class__.__name__, "Error in trades: %s" % e)                
-                
+                time.sleep(1)
+                continue
             for trade in ret:
                 assert isinstance(trade.trade_id, str), "trade.trade_id(%s) = %s" % (type(trade.trade_id), trade.trade_id)
                 assert isinstance(instmt.get_exch_trade_id(), str), \
