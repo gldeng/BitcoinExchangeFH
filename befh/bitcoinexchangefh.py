@@ -7,6 +7,7 @@ from befh.exchange import ExchangeGateway
 from befh.exch_bitmex import ExchGwBitmex
 from befh.exch_btcc import ExchGwBtccSpot, ExchGwBtccFuture
 from befh.exch_bitfinex import ExchGwBitfinex
+from befh.exch_bithumb import ExchGwBithumb
 from befh.exch_okex import ExchGwOkex
 from befh.exch_kraken import ExchGwKraken
 from befh.exch_gdax import ExchGwGdax
@@ -26,7 +27,7 @@ from befh.exch_gateio import ExchGwGateio
 
 from befh.kdbplus_client import KdbPlusClient
 from befh.mysql_client import MysqlClient
-# from befh.sqlite_client import SqliteClient
+from befh.sqlite_client import SqliteClient
 from befh.file_client import FileClient
 from befh.zmq_client import ZmqClient
 from befh.kafka_client import KafkaClient
@@ -73,11 +74,11 @@ def main():
 
     db_clients = []
     is_database_defined = False
-    # if args.sqlite:
-    #     db_client = SqliteClient()
-    #     db_client.connect(path=args.sqlitepath)
-    #     db_clients.append(db_client)
-    #     is_database_defined = True
+    if args.sqlite:
+        db_client = SqliteClient()
+        db_client.connect(path=args.sqlitepath)
+        db_clients.append(db_client)
+        is_database_defined = True
     if args.mysql:
         db_client = MysqlClient()
         mysqldest = args.mysqldest
@@ -150,6 +151,7 @@ def main():
     exch_gws.append(ExchGwBtccFuture(db_clients))
     exch_gws.append(ExchGwBitmex(db_clients))
     exch_gws.append(ExchGwBitfinex(db_clients))
+    exch_gws.append(ExchGwBithumb(db_clients))
     exch_gws.append(ExchGwOkex(db_clients))
     exch_gws.append(ExchGwKraken(db_clients))
     exch_gws.append(ExchGwGdax(db_clients))
